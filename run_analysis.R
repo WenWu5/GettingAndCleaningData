@@ -1,19 +1,19 @@
 #Start of part 1
 
-if ( !file.exists("./Coursera/data/UCI HAR Dataset") ) {
+if ( !file.exists("./UCI HAR Dataset") ) {
   fileURL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-  download.file(fileURL, "./Coursera/data/project.zip")
-  unzip("./Coursera/data/project.zip", exdir = "./Coursera/data")
+  download.file(fileURL, "./project.zip")
+  unzip("./project.zip", exdir = ".")
 }
 
-testData <- read.table("./Coursera/data/UCI HAR Dataset/test/X_test.txt")
-trainData <- read.table("./Coursera/data/UCI HAR Dataset/train/X_train.txt")
+testData <- read.table("./UCI HAR Dataset/test/X_test.txt")
+trainData <- read.table("./UCI HAR Dataset/train/X_train.txt")
 
-testLabel <- read.table("./Coursera/data/UCI HAR Dataset/test/y_test.txt")
-trainLabel <- read.table("./Coursera/data/UCI HAR Dataset/train/y_train.txt")
+testLabel <- read.table("./UCI HAR Dataset/test/y_test.txt")
+trainLabel <- read.table("./UCI HAR Dataset/train/y_train.txt")
 
-testSubject <- read.table("./Coursera/data/UCI HAR Dataset/test/subject_test.txt")
-trainSubject <- read.table("./Coursera/data/UCI HAR Dataset/train/subject_train.txt")
+testSubject <- read.table("./UCI HAR Dataset/test/subject_test.txt")
+trainSubject <- read.table("./UCI HAR Dataset/train/subject_train.txt")
 
 dataTotal <- rbind(trainData, testData)
 labelTotal <- rbind(trainLabel, testLabel)
@@ -24,7 +24,7 @@ mergedDT <- cbind(cbind(subjectTotal, labelTotal), dataTotal)
 
 #Start of Part2
 
-featuresDT <- read.table("./Coursera/data/UCI HAR Dataset/features.txt")
+featuresDT <- read.table("./UCI HAR Dataset/features.txt")
 setnames(mergedDT, c(3:563), as.character(featuresDT$V2))
 setnames(mergedDT, c(1,2), c("subject", "activity"))
 
@@ -36,7 +36,7 @@ mergedDT <- mergedDT[, keepColumnsIndex]
 
 #Start of Part3
 
-activityNames <- read.table("./Coursera/data/UCI HAR Dataset/activity_labels.txt")
+activityNames <- read.table("./UCI HAR Dataset/activity_labels.txt")
 mergedDT[,2] <- activityNames[mergedDT[,2], 2]
 
 #End of Part3
@@ -56,6 +56,6 @@ names(mergedDT) <- gsub("Mag", "Magnitude", names(mergedDT))
 averageDT <- aggregate(mergedDT[, 3:ncol(mergedDT)], by = list(mergedDT$activity, mergedDT$subject), mean)
 names(averageDT)[1] <- "activity"
 names(averageDT)[2] <- "subject"
-write.table(averageDT, "./Coursera/data/tidyDataAverageForSubjectAndActivity.txt")
+write.table(averageDT, "./tidyDataAverageForSubjectAndActivity.txt")
 
 #End of Part5
